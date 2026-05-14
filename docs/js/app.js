@@ -466,11 +466,15 @@ function initAuth() {
     return;
   }
 
-  // Show loading while checking auth state
-  $('loginOverlay').classList.add('hidden');
-  $('appLoading').classList.remove('hidden');
+  // Check Firebase actually loaded
+  if (typeof fbAuth === 'undefined') {
+    showApp(); buildCategorySelect(); setDefaultDate(); render(); return;
+  }
 
-  fbAuth.onAuthStateChanged(async user => {
+  // Show loading spinner while checking auth (login overlay stays visible)
+  $('appLoading').style.display = 'flex';
+
+  try { fbAuth.onAuthStateChanged(async user => {
     if (user) {
       // Load cloud data and merge into local cache
       const cloud = await fbLoad();
@@ -490,7 +494,7 @@ function initAuth() {
       $('userArea').classList.remove('visible');
       showLogin();
     }
-  });
+  }); } catch(e) { console.error('Auth setup failed', e); showLogin(); }
 
   $('btnGoogleLogin').addEventListener('click', async () => {
     try {
