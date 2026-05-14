@@ -527,6 +527,11 @@ ul { list-style: none; }
   -webkit-text-fill-color: transparent;
   letter-spacing: .08em;
 }
+.splash-tagline {
+  font-size: .95rem; color: var(--muted);
+  animation: splashFadeIn .6s ease 1s both;
+  letter-spacing: .03em;
+}
 
 /* ========================================
    LOGIN OVERLAY
