@@ -475,6 +475,60 @@ ul { list-style: none; }
 .btn-cancel-sm:hover { color: var(--text); border-color: var(--border2); }
 
 /* ========================================
+   SPLASH SCREEN
+======================================== */
+.splash-screen {
+  position: fixed; inset: 0; z-index: 999;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1.25rem;
+  background: linear-gradient(145deg, #fff0f6 0%, #fce7f3 50%, #ffd6eb 100%);
+}
+
+.splash-screen.slide-up {
+  animation: splashSlideUp .6s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+@keyframes splashSlideUp {
+  from { transform: translateY(0);    opacity: 1; }
+  to   { transform: translateY(-100vh); opacity: 0; }
+}
+
+.splash-logo {
+  font-size: 5rem; line-height: 1;
+  animation: logoBounce .8s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes logoBounce {
+  0%   { transform: scale(0);    opacity: 0; }
+  60%  { transform: scale(1.25); opacity: 1; }
+  80%  { transform: scale(0.9);  }
+  90%  { transform: scale(1.1);  }
+  100% { transform: scale(1);    opacity: 1; }
+}
+
+.splash-text {
+  display: flex; flex-direction: column; align-items: center; gap: .25rem;
+  animation: splashFadeIn .6s ease .5s both;
+}
+
+@keyframes splashFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.splash-title {
+  font-size: 1.6rem; font-weight: 800; color: var(--text);
+  letter-spacing: .02em;
+}
+.splash-brand {
+  font-size: 1rem; font-weight: 600;
+  background: var(--grad);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: .08em;
+}
+
+/* ========================================
    LOGIN OVERLAY
 ======================================== */
 .login-overlay {

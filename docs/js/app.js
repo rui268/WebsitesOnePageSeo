@@ -515,5 +515,13 @@ function initAuth() {
   });
 }
 
+// ── Splash ────────────────────────────────────────────────
+function hideSplash(callback) {
+  const el = $('splashScreen');
+  if (!el) { callback(); return; }
+  el.classList.add('slide-up');
+  setTimeout(() => { el.style.display = 'none'; callback(); }, 600);
+}
+
 // ── Boot ──────────────────────────────────────────────────
-initAuth();
+setTimeout(() => hideSplash(initAuth), 2000);
