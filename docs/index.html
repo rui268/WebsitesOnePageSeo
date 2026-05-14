@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>記帳本 BudgetPal</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#fff0f6" />
+
+  <!-- iOS Safari 安裝為 App -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="記帳本" />
+  <link rel="apple-touch-icon" href="icons/icon.svg" />
+
+  <!-- Android Chrome -->
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- ===== LOGIN OVERLAY ===== -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+      <div class="login-logo">💰</div>
+      <h1 class="login-title">記帳本 <em>BudgetPal</em></h1>
+      <p class="login-subtitle">登入後自動同步所有裝置的帳本資料</p>
+      <button class="btn-google" id="btnGoogleLogin">
+        <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          <path fill="none" d="M0 0h48v48H0z"/>
+        </svg>
+        使用 Google 帳號登入
+      </button>
+      <p class="login-hint">首次登入自動建立帳戶 · 資料加密儲存</p>
+    </div>
+  </div>
+
+  <!-- ===== LOADING ===== -->
+  <div class="app-loading hidden" id="appLoading">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar">
+    <div class="navbar__logo">
+      <span class="logo-icon">💰</span>
+      <span class="logo-text">記帳本 <em>BudgetPal</em></span>
+    </div>
+    <div class="month-nav">
+      <button class="month-btn" id="prevMonth" title="上個月">&#9664;</button>
+      <span class="current-month" id="currentMonth"></span>
+      <button class="month-btn" id="nextMonth" title="下個月">&#9654;</button>
+    </div>
+    <div class="user-area" id="userArea">
+      <img class="user-avatar" id="userAvatar" src="" alt="" />
+      <span class="user-name" id="userName"></span>
+      <button class="btn-signout" id="btnSignOut">登出</button>
+    </div>
+  </header>
+
+  <!-- ===== SUMMARY BAR ===== -->
+  <div class="summary-bar">
+    <div class="summary-card income-card">
+      <span class="sc-icon">&#8679;</span>
+      <div class="sc-info">
+        <span class="sc-label">本月收入</span>
+        <span class="sc-amount" id="totalIncome">$0</span>
+      </div>
+    </div>
+    <div class="summary-card expense-card">
+      <span class="sc-icon">&#8681;</span>
+      <div class="sc-info">
+        <span class="sc-label">本月支出</span>
+        <span class="sc-amount" id="totalExpense">$0</span>
+      </div>
+    </div>
+    <div class="summary-card balance-card">
+      <span class="sc-icon">&#9889;</span>
+      <div class="sc-info">
+        <span class="sc-label">結餘</span>
+        <span class="sc-amount" id="totalBalance">$0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MAIN LAYOUT ===== -->
+  <main class="layout">
+
+    <!-- LEFT: form + records -->
+    <section class="content">
+
+      <!-- Add record form -->
+      <div class="card">
+        <div class="card-header">
+          <h2>新增記錄</h2>
+          <div class="type-toggle" id="typeToggle">
+            <button class="type-btn active" data-type="expense">支出</button>
+            <button class="type-btn" data-type="income">收入</button>
+          </div>
+        </div>
+        <form class="record-form" id="recordForm" autocomplete="off">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fAmount">金額</label>
+              <input type="number" id="fAmount" placeholder="0" min="0.01" step="0.01" required />
+            </div>
+            <div class="form-group">
+              <label for="fCategory">分類</label>
+              <select id="fCategory" required></select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fDate">日期</label>
+              <input type="date" id="fDate" required />
+            </div>
+            <div class="form-group">
+              <label for="fNote">備註</label>
+              <input type="text" id="fNote" placeholder="選填" maxlength="50" />
+            </div>
+          </div>
+          <button type="submit" class="btn-submit" id="submitBtn">＋ 新增記錄</button>
+        </form>
+      </div>
+
+      <!-- Records list -->
+      <div class="card">
+        <div class="card-header">
+          <h2>本月明細</h2>
+          <div class="filter-tabs" id="filterTabs">
+            <button class="tab active" data-filter="all">全部</button>
+            <button class="tab" data-filter="expense">支出</button>
+            <button class="tab" data-filter="income">收入</button>
+          </div>
+        </div>
+        <div class="records-list" id="recordsList"></div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT: budget + chart -->
+    <aside class="sidebar">
+
+      <!-- Budget card -->
+      <div class="card">
+        <div class="card-header">
+          <h3>月預算</h3>
+          <button class="btn-edit" id="editBudgetBtn">編輯</button>
+        </div>
+
+        <div class="budget-edit hidden" id="budgetEditRow">
+          <input type="number" id="budgetInput" placeholder="輸入預算金額" min="1" />
+          <button class="btn-save" id="saveBudgetBtn">儲存</button>
+          <button class="btn-cancel" id="cancelBudgetBtn">取消</button>
+        </div>
+
+        <div class="budget-amounts">
+          <span class="ba-spent" id="budgetSpent">$0</span>
+          <span class="ba-sep">已花費 /</span>
+          <span class="ba-total" id="budgetTotal">未設定</span>
+        </div>
+
+        <div class="progress-wrap" id="progressWrap">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <span class="progress-pct" id="progressPct">--%</span>
+        </div>
+        <p class="budget-hint" id="budgetHint"></p>
+      </div>
+
+      <!-- Pie chart -->
+      <div class="card">
+        <h3>支出分析</h3>
+        <div class="chart-wrap">
+          <canvas id="pieChart"></canvas>
+          <p class="chart-empty hidden" id="chartEmpty">本月尚無支出資料</p>
+        </div>
+        <ul class="chart-legend" id="chartLegend"></ul>
+      </div>
+
+      <!-- Category summary -->
+      <div class="card">
+        <h3>分類明細</h3>
+        <ul class="cat-summary" id="catSummary"></ul>
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- ===== DELETE CONFIRM TOAST ===== -->
+  <div class="confirm-overlay hidden" id="confirmOverlay">
+    <div class="confirm-box">
+      <p>確定要刪除這筆記錄嗎？</p>
+      <div class="confirm-actions">
+        <button class="btn-danger" id="confirmDelete">刪除</button>
+        <button class="btn-cancel-sm" id="cancelDelete">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MOBILE BOTTOM NAV ===== -->
+  <nav class="bottom-nav" id="bottomNav">
+    <button class="bn-item active" data-tab="record">
+      <span class="bn-icon">＋</span>
+      <span class="bn-label">記帳</span>
+    </button>
+    <button class="bn-item" data-tab="list">
+      <span class="bn-icon">☰</span>
+      <span class="bn-label">明細</span>
+    </button>
+    <button class="bn-item" data-tab="chart">
+      <span class="bn-icon">◎</span>
+      <span class="bn-label">統計</span>
+    </button>
+    <button class="bn-item" data-tab="budget">
+      <span class="bn-icon">◈</span>
+      <span class="bn-label">預算</span>
+    </button>
+  </nav>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
+  <script src="js/chart.umd.min.js"></script>
+  <script src="js/firebase.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
