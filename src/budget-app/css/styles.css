@@ -475,6 +475,117 @@ ul { list-style: none; }
 .btn-cancel-sm:hover { color: var(--text); border-color: var(--border2); }
 
 /* ========================================
+   LOGIN OVERLAY
+======================================== */
+.login-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg);
+  background-image:
+    radial-gradient(ellipse at 20% 15%, rgba(249,115,22,.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(236,72,153,.18) 0%, transparent 50%);
+}
+
+.login-box {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 16px 64px rgba(236,72,153,.2);
+  text-align: center;
+  max-width: 360px; width: 90%;
+  position: relative; overflow: hidden;
+}
+.login-box::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: var(--grad);
+}
+
+.login-logo   { font-size: 3rem; display: block; margin-bottom: .75rem; }
+.login-title  {
+  font-size: 1.5rem; font-weight: 800; margin-bottom: .5rem;
+  color: var(--text);
+}
+.login-title em {
+  background: var(--grad);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-style: normal;
+}
+.login-subtitle {
+  font-size: .88rem; color: var(--muted);
+  margin-bottom: 1.75rem; line-height: 1.5;
+}
+
+.btn-google {
+  display: flex; align-items: center; justify-content: center; gap: .65rem;
+  width: 100%; padding: .8rem 1rem;
+  background: #fff; border: 2px solid var(--border);
+  border-radius: var(--radius-sm); cursor: pointer;
+  font-size: .95rem; font-weight: 600; color: var(--text);
+  transition: all .2s;
+  box-shadow: 0 2px 8px rgba(236,72,153,.1);
+}
+.btn-google:hover {
+  border-color: var(--g2);
+  box-shadow: 0 4px 20px rgba(236,72,153,.2);
+  transform: translateY(-1px);
+}
+.btn-google:disabled {
+  opacity: .6; cursor: not-allowed; transform: none;
+}
+
+.login-hint {
+  font-size: .75rem; color: var(--muted);
+  margin-top: 1rem;
+}
+
+/* ========================================
+   APP LOADING
+======================================== */
+.app-loading {
+  position: fixed; inset: 0; z-index: 400;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg);
+}
+.loading-spinner {
+  width: 36px; height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--g2);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ========================================
+   NAVBAR USER AREA
+======================================== */
+.user-area {
+  display: none; align-items: center; gap: .6rem;
+}
+.user-area.visible { display: flex; }
+
+.user-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2px solid var(--border);
+  object-fit: cover;
+}
+.user-name {
+  font-size: .82rem; font-weight: 600; color: var(--text);
+  max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.btn-signout {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--muted); padding: .22rem .65rem; font-size: .75rem;
+  transition: all .2s;
+}
+.btn-signout:hover {
+  background: var(--red-bg); border-color: var(--red); color: var(--red);
+}
+
+/* ========================================
    UTILITIES
 ======================================== */
 .hidden { display: none !important; }
