@@ -453,8 +453,8 @@ if ('serviceWorker' in navigator) {
 }
 
 // ── Auth ──────────────────────────────────────────────────
-function showApp()   { $('loginOverlay').classList.add('hidden'); $('appLoading').classList.add('hidden'); }
-function showLogin() { $('loginOverlay').classList.remove('hidden'); $('appLoading').classList.add('hidden'); }
+function showApp()   { $('loginOverlay').style.display = 'none'; $('appLoading').style.display = 'none'; }
+function showLogin() { $('loginOverlay').style.display = ''; $('appLoading').style.display = 'none'; }
 
 function initAuth() {
   // Firebase not configured → run offline mode
