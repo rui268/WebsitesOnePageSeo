@@ -4,12 +4,12 @@
 ============================================================ */
 
 const FIREBASE_CONFIG = {
-  apiKey:            "REPLACE_ME",
-  authDomain:        "REPLACE_ME.firebaseapp.com",
-  projectId:         "REPLACE_ME",
-  storageBucket:     "REPLACE_ME.appspot.com",
-  messagingSenderId: "REPLACE_ME",
-  appId:             "REPLACE_ME"
+  apiKey:            "AIzaSyC-offXMoJPGio-3O7S1ERUB4GRUUuhJD0",
+  authDomain:        "budget-2-25f9d.firebaseapp.com",
+  projectId:         "budget-2-25f9d",
+  storageBucket:     "budget-2-25f9d.firebasestorage.app",
+  messagingSenderId: "200690061808",
+  appId:             "1:200690061808:web:f95ee55ddbeb5499f48d35"
 };
 
 // ── 檢查是否已設定 ────────────────────────────────────────
